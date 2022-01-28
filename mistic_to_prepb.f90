@@ -25,8 +25,8 @@ program rscat_to_prepb
   real               :: typ
   character*4        :: ctyp
 
-  character*80,parameter :: bufrtable='/discover/nobackup/wrmccart/rscat/bufrize/qscat_tabl'
-  character*80,parameter ::  errtable='/discover/nobackup/wrmccart/mistic/bufrize/prepobs_errtable.global'
+  character*80,parameter :: bufrtable='/discover/nobackup/projects/gmao/obsdev/bkarpowi/osseObsGen/osse-obgen-bundle/osse-obgen-bufr/qscat_tabl'
+  character*80,parameter ::  errtable='/discover/nobackup/projects/gmao/obsdev/bkarpowi/osseObsGen/osse-obgen-bundle/osse-obgen-bufr/prepobs_errtable.global'
 
   real,parameter :: dtor=0.017453293
 
