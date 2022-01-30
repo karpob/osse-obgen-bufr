@@ -99,7 +99,7 @@
 
   100 CONTINUE
       IF(IREC.EQ.0) THEN
-         call die('etable', 'OBS. ERROR TABLE EMPTY OR DOES NOT EXIST', 60)
+      call die('etable','OBS. ERROR TABLE EMPTY OR DOES NOT EXIST', 60)
       END IF
       
       close(iunite)

@@ -107,7 +107,7 @@
          ludx = luavail()
 
          if ( usebufr ) then
-           open(unit=ludx,file=bufrtable,action='read',form='unformatted')
+         open(unit=ludx,file=bufrtable,action='read',form='unformatted')
          else
            open(unit=ludx,file=bufrtable,action='read',form='formatted')
          endif

@@ -664,7 +664,8 @@
       character(63) lozstr
       character(40) ozstr
       data lozstr 
-     & /'OSP12 OSP11 OSP10 OSP9 OSP8 OSP7 OSP6 OSP5 OSP4 OSP3 OSP2 OSP1 '/
+     &/'OSP12 OSP11 OSP10 OSP9
+     & OSP8 OSP7 OSP6 OSP5 OSP4 OSP3 OSP2 OSP1 '/
       data ozstr  /'SAID CLAT CLON YEAR MNTH DAYS HOUR MINU ' /
       real(8),dimension(nloz):: ozone_8
       real(8),dimension(8):: hdroz
