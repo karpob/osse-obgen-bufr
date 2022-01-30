@@ -1,26 +1,47 @@
-#####################################################################################
-# # Currently not installed in GNU Make                                             #
-# ecbuild_add_executable (                                                          #
-#   TARGET gsi.x                                                                    #
-#   SOURCES gsimain.F90                                                             #
-#   LIBS GEOSaana_GridComp GSI_GridComp GEOSgsi_Coupler                             #
-#        NCEP_crtm NCEP_sfcio NCEP_bufr_r8i4 NCEP_nemsio NCEP_bacio_r4i4 NCEP_gfsio #
-#        NCEP_sp_r8i4 NCEP_w3_r8i4 nc_diag_read nc_diag_write)                      #
-#####################################################################################
+
 cmake_minimum_required (VERSION 3.13)
+######
 cmake_policy (SET CMP0053 NEW)
 cmake_policy (SET CMP0054 NEW)
 
-
 project (
-  dafuk
-  VERSION 5.27.1
-  LANGUAGES Fortran CXX C)  # Note - CXX is required for ESMF
+  tst
+  VERSION 1.0.0
+  LANGUAGES Fortran)  # Note - CXX is required for ESMF
+
+
+
+if ("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
+   message(SEND_ERROR "In-source builds are disabled. Please
+           issue cmake command in separate build directory.")
+endif ("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
+
+# Set the default build type to release
+if (NOT CMAKE_BUILD_TYPE)
+  message (STATUS "Setting build type to 'Release' as none was specified.")
+  set (CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property (CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif ()
+
+set (DOING_GEOS5 YES)
+
+# Should find a better place for this - used in Chem component
+set (ACG_FLAGS -v)
+set (F2PYEXT .so)
+set (F2PY_SUFFIX .so)
+set (FV_PRECISION R4R8)
+
+
+
+######
+
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/@cmake")
 include (esma)
 ecbuild_declare_project()
-set(CMAKE_INCLUDE_PATH "/discover/nobackup/projects/gmao/obsdev/bkarpowi/osseObsGen/GEOSadas/install/include/GMAO_mpeu" )
+
 # This is equivalent to FOPT=$(FOPT3) in GNU Make
 if (CMAKE_Fortran_COMPILER_ID MATCHES Intel)
    set (CMAKE_Fortran_FLAGS_RELEASE "${FOPT3} ${BIG_ENDIAN} ${BYTERECLEN} ${FP_MODEL_STRICT} ${ALIGNCOM}")
@@ -40,7 +61,7 @@ include_directories("${INC_NETCDF}")
 LINK_DIRECTORIES("/discover/nobackup/projects/gmao/obsdev/bkarpowi/osseObsGen/GEOSadas/install/lib/")
 
 
-project( tst VERSION 1.0.0 LANGUAGES Fortran )
+#project( tst VERSION 1.0.0 LANGUAGES Fortran )
 ecbuild_add_executable (
   TARGET mistic_to_prepob.x
   SOURCES m_errtbl.f  mistic_to_prepb.f90  m_obsgen_uv.f90  m_obsgen_uv.f90_bak  m_pbmin.f  m_pbutil.f  
