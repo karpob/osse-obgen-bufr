@@ -75,6 +75,13 @@ program rscat_to_prepb
   call read_obsgen_uv(uvfnin)
   if (debug) print *,'Opened ',uvfnin
 
+  !if (debug) print *,'Opening ',uvfnin
+  !call read_uv_nc('test.wind.profile.uv2')
+  !if (debug) print *,'Opened ',uvfnin
+
+
+
+
   nobs = get_nobs_obsgen_uv()
   if (debug) print *,'File contains ',nobs,' observations '
 

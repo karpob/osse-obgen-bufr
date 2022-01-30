@@ -5,7 +5,7 @@ cmake_policy (SET CMP0053 NEW)
 cmake_policy (SET CMP0054 NEW)
 
 project (
-  tst
+  bufrize
   VERSION 1.0.0
   LANGUAGES Fortran)  # Note - CXX is required for ESMF
 
@@ -64,7 +64,7 @@ LINK_DIRECTORIES("/discover/nobackup/projects/gmao/obsdev/bkarpowi/osseObsGen/GE
 #project( tst VERSION 1.0.0 LANGUAGES Fortran )
 ecbuild_add_executable (
   TARGET mistic_to_prepob.x
-  SOURCES m_errtbl.f  mistic_to_prepb.f90  m_obsgen_uv.f90  m_obsgen_uv.f90_bak  m_pbmin.f  m_pbutil.f  
+  SOURCES m_errtbl.f  mistic_to_prepb.f90  m_obsgen_uv.f90 m_pbmin.f  m_pbutil.f  
   LIBS GMAO_mpeu NCEP_bufr_r8i4)
 target_link_libraries(mistic_to_prepob.x GMAO_mpeu )
 set_target_properties(mistic_to_prepob.x PROPERTIES Fortran_MODULE_DIRECTORY "/discover/nobackup/projects/gmao/obsdev/bkarpowi/osseObsGen/GEOSadas/install/include/GMAO_mpeu")
@@ -73,4 +73,6 @@ add_definitions(${MPI_Fortran_COMPILE_FLAGS})
 target_compile_options(mistic_to_prepob.x PRIVATE  -extend-source 132)
 include_directories(${MPI_Fortran_INCLUDE_PATH})
 link_directories(${MPI_Fortran_LIBRARIES})
+link_directories(${NETCDF_LIBRARIES})
 target_link_libraries(mistic_to_prepob.x ${MPI_Fortran_LIBRARIES})
+target_link_libraries(mistic_to_prepob.x ${NETCDF_LIBRARIES})
