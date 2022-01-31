@@ -14,9 +14,11 @@ module m_obsgen_uv
    public :: get_datetime_obsgen_uv
    public :: get_lonlatlev_obsgen_uv
    public :: get_uv_obsgen_uv
+   public :: get_hrs_in_win_obsgen_uv
    real,dimension(:,:),allocatable :: lonlat 
    real,dimension(:),allocatable   :: level, uwnd, vwnd
    integer,dimension(:,:),allocatable :: datetime ! YYYY,MM,DD,HH,MIN,SS
+   real,dimension(:),allocatable :: hrs_in_win ! YYYY,MM,DD,HH,MIN,SS
 
 
    integer                         :: nobs = -9999
@@ -91,6 +93,11 @@ contains
       mn   = datetime(5,current_ob)
       ss   = datetime(6,current_ob)
    end subroutine get_datetime_obsgen_uv
+
+   subroutine get_hrs_in_win_obsgen_uv(hrz)
+      real, intent(out) :: hrz
+      hrz = hrs_in_win(current_ob)
+   end subroutine get_hrs_in_win_obsgen_uv
 
    subroutine get_lonlatlev_obsgen_uv(lon, lat, lev)
       real,intent(out) :: lon, lat, lev
@@ -208,7 +215,7 @@ contains
   !interface variables
   character(len=*), intent(in) :: f
   integer :: ntime, nlev, nls, nchan, ob_err, ob_ncid
-  real,allocatable, dimension(:,:) ::ob_u, ob_v, ob_p
+  real,allocatable, dimension(:) ::ob_u, ob_v, ob_p,ob_secs
   real,allocatable, dimension(:) :: ob_Longitude, ob_Latitude
   
   ! open the file
@@ -220,8 +227,7 @@ contains
 
     ! get netcdf dimensions
   call read_dimension(ob_ncid,'time',ntime)
-  call read_dimension(ob_ncid,'lev',nlev)
-  call read_dimension(ob_ncid,'ls',nls)
+  nobs = ntime
   !write(*,*)'nlat,nlon,nchan,nmonth',nlat,nlon,nchan,nmonth
   ! allocate variables needed to read netcdf
   allocate( ob_Longitude(ntime),stat = ob_err )
@@ -236,19 +242,25 @@ contains
     stop 13 
   endif 
 
-  allocate( ob_u(nlev,ntime),stat=ob_err )
+  allocate( ob_secs(ntime),stat = ob_err )
+  if(ob_err /= 0) then
+    write(*,*),'read_uv: error allocate Latitude'
+    stop 13 
+  endif 
+
+  allocate( ob_u(ntime),stat=ob_err )
   if(ob_err /= 0) then
     write(*,*),'read_uv: error allocate u'
     stop 13 
   endif 
 
-  allocate( ob_v(nlev,ntime),stat=ob_err )
+  allocate( ob_v(ntime),stat=ob_err )
   if(ob_err /= 0) then
     write(*,*),'read_uv: error allocate v'
     stop 13 
   endif 
 
-  allocate( ob_p(nlev,ntime),stat=ob_err )
+  allocate( ob_p(ntime),stat=ob_err )
   if(ob_err /= 0) then
     write(*,*),'read_uv: error allocate p'
     stop 13 
@@ -256,14 +268,28 @@ contains
 
 
   !read netcdf variables 
-  call read_variable1d(ob_ncid, 'trjLat',ob_Longitude)
-  call read_variable1d(ob_ncid, 'trjLon',ob_Latitude)
+  call read_variable1d(ob_ncid, 'trjLat',ob_Latitude)
+  call read_variable1d(ob_ncid, 'trjLon',ob_Longitude)
+  call read_variable1d(ob_ncid, 'seconds_from_center',ob_secs)
 
-  call read_variable2d(ob_ncid, 'U',ob_u)
-  call read_variable2d(ob_ncid, 'V',ob_v)
-  call read_variable2d(ob_ncid, 'DELP',ob_p)
+  call read_variable1d(ob_ncid, 'U',ob_u)
+  call read_variable1d(ob_ncid, 'V',ob_v)
+  call read_variable1d(ob_ncid, 'P',ob_p)
 
+  allocate(  lonlat(2,nobs),  &
+             hrs_in_win(nobs),&
+             level(nobs)     ,&
+             uwnd(nobs)      ,&
+                 vwnd(nobs)       )
+  lonlat(1,:) = ob_Longitude(:)
+  lonlat(2,:) = ob_Latitude(:)
+  hrs_in_win(:) = ob_secs(:)/3600 
 
+  level(:) = ob_p(:)
+  uwnd(:) = ob_u(:)
+  vwnd(:) = ob_v(:)
+  
+  current_ob = 1
   end subroutine read_uv_nc
 
 end module m_obsgen_uv

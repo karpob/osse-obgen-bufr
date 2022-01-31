@@ -72,9 +72,8 @@ program rscat_to_prepb
   read(ctyp,*) typ
 
   if (debug) print *,'Opening ',uvfnin
-  call read_obsgen_uv(uvfnin)
+  call read_uv_nc(uvfnin)
   if (debug) print *,'Opened ',uvfnin
-
 
   nobs = get_nobs_obsgen_uv()
   if (debug) print *,'File contains ',nobs,' observations '
@@ -139,15 +138,16 @@ program rscat_to_prepb
     stid = 'DUMM1234'
 
 !    if (debug) print *,'Getting uv obs', i
-    call get_datetime_obsgen_uv(yyyy,mm,dd,hh,mn,ss)
-    datetime(1) = yyyy
-    datetime(2) =   mm 
-    datetime(3) =   dd
-    datetime(4) =   hh 
-    datetime(5) =   mn
-    datetime(6) =   ss
-    call get_window_time(datetime, window_time)
+    !#call get_datetime_obsgen_uv(yyyy,mm,dd,hh,mn,ss)
+    !datetime(1) = yyyy
+    !datetime(2) =   mm 
+    !datetime(3) =   dd
+    !datetime(4) =   hh 
+    !datetime(5) =   mn
+    !datetime(6) =   ss
+    !call get_window_time(datetime, window_time)
 
+    call get_hrs_in_win_obsgen_uv(window_time)
 
     call get_lonlatlev_obsgen_uv(lon, lat, lev)
     call get_uv_obsgen_uv(u,v)
