@@ -215,7 +215,7 @@ contains
   !interface variables
   character(len=*), intent(in) :: f
   integer :: ntime, nlev, nls, nchan, ob_err, ob_ncid
-  real,allocatable, dimension(:) ::ob_u, ob_v, ob_p,ob_secs
+  real,allocatable, dimension(:) ::ob_u, ob_v, ob_p,ob_hours
   real,allocatable, dimension(:) :: ob_Longitude, ob_Latitude
   
   ! open the file
@@ -242,7 +242,7 @@ contains
     stop 13 
   endif 
 
-  allocate( ob_secs(ntime),stat = ob_err )
+  allocate( ob_hours(ntime),stat = ob_err )
   if(ob_err /= 0) then
     write(*,*),'read_uv: error allocate Latitude'
     stop 13 
@@ -270,7 +270,7 @@ contains
   !read netcdf variables 
   call read_variable1d(ob_ncid, 'trjLat',ob_Latitude)
   call read_variable1d(ob_ncid, 'trjLon',ob_Longitude)
-  call read_variable1d(ob_ncid, 'seconds_from_center',ob_secs)
+  call read_variable1d(ob_ncid, 'hours_from_center',ob_hours)
 
   call read_variable1d(ob_ncid, 'U',ob_u)
   call read_variable1d(ob_ncid, 'V',ob_v)
@@ -283,7 +283,7 @@ contains
                  vwnd(nobs)       )
   lonlat(1,:) = ob_Longitude(:)
   lonlat(2,:) = ob_Latitude(:)
-  hrs_in_win(:) = ob_secs(:)/3600 
+  hrs_in_win(:) = ob_hours(:)
 
   level(:) = ob_p(:)
   uwnd(:) = ob_u(:)

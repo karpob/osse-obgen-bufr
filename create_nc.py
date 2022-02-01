@@ -27,15 +27,18 @@ def write_variables(fname, lats, lons, p, u, v, timez, w_year, w_month, w_day, w
     
     fh = Dataset(fname, 'w', format='NETCDF4')
     index  = fh.createDimension('time', len(timez))
-    nc_secFromC = fh.createVariable('seconds_from_center', np.float32, ('time',))
+    nc_secFromC = fh.createVariable('hours_from_center', np.float32, ('time',))
     secFromC = []
     time_stamp = datetime(year=w_year,month=w_month,day=w_day,hour=w_hr)
     for t in timez:
-        secFromC.append((t-time_stamp).total_seconds())
+        num = np.float32((t-time_stamp).total_seconds())
+        den = np.float32(3600.0)
+        secFromC.append(num/den)
     secFromC = np.asarray(secFromC)
+    secFromC.dtype=np.float32
     nc_secFromC[:] = secFromC
-    nc_secFromC.units = "seconds from window center"
-    nc_secFromC.long_name = "seconds_increment" ;
+    nc_secFromC.units = "hours from window center"
+    nc_secFromC.long_name = "hours_increment" ;
 
     lats_  = fh.createVariable('trjLat', np.float32, ('time',))
     lats_.long_name = "latitude" ;
