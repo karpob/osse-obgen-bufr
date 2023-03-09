@@ -2,12 +2,19 @@
 tools to generate bufr files for either a netcdf format or ascii formatted winds
 
 mistic_to_prepb.f90    --> driver for ascii version
+
 mistic_to_prepb_nc.f90 --> driver for netcdf version
+
 m_obsgen_uv.f90 --> contains helper functions for bothe netcdf and ascii version
+
 m_pbmin.f  --> BUFR stuff
+
 m_pbutil.f --> more BUFR stuff
+
 m_errtbl.f --> even more BUFR stuff
+
 prepobs_errtable.global
+
 qscat_tabl
 
 @cmake points to a GEOSadas's @cmake to pick up cmake stuff (various GEOS modules and netcdf).
