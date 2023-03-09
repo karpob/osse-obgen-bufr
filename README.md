@@ -10,7 +10,7 @@ m_errtbl.f --> even more BUFR stuff
 prepobs_errtable.global
 qscat_tabl
 
-@cmake points to a GEOSadas build to pick up cmake stuff.
+@cmake points to a GEOSadas's @cmake to pick up cmake stuff (various GEOS modules and netcdf).
 
 to build, source sourceMe.csh  and follow instructions replacing with $
 
